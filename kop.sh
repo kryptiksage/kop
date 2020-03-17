@@ -10,6 +10,24 @@ curl -s -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq -r '
 
 case $1 in
 	-S)
-
+	for(( i=2; i<=$#; i++ ))
+	do
+		package=$(off_pkg name $2)
+		if [ -z "$package" ]
+		then
+			package=$(aur_pkg $2 | grep "^$package$")
+			if [ -z $package ]
+			then
+				echo "Invalid package name : $package"
+			else
+				echo "Cloning aur repo..."
+				git clone --depth=1 https://aur.archlinux.org/$package.git $HOME/.cache/kop/$package 2>/dev/null
+				cd $HOME/.cache/kop/$package
+				makepkg -si
+			fi
+		else
+			sudo pacman -S $package
+		fi
+	done
 	;;
 esac
