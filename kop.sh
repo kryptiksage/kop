@@ -15,8 +15,8 @@ case $1 in
 		package=$(off_pkg name $2)
 		if [ -z "$package" ]
 		then
-			package=$(aur_pkg $2 | grep "^$package$")
-			if [ -z $package ]
+			package=$(aur_pkg $2 | grep "^$2$")
+			if [ -z "$package" ]
 			then
 				echo "Invalid package name : $package"
 			else
