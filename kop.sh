@@ -30,4 +30,10 @@ case $1 in
 		fi
 	done
 	;;
+	"")
+	# TODO : code for updating all packages
+	;;
+	*)
+	# TODO : code for listing packages
+	;;
 esac
