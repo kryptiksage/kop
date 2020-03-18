@@ -10,6 +10,7 @@ curl -s -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq -r '
 
 case $1 in
 	-S)
+	[ $# -lt 2 ] && echo "Insuffient number of packages" && exit 1
 	for(( i=2; i<=$#; i++ ))
 	do
 		package=$(off_pkg name $2)
@@ -31,6 +32,7 @@ case $1 in
 	done
 	;;
 	-R)
+	[ $# -lt 2 ] && echo "Insuffient number of packages" && exit 1
 	sudo pacman -R $2
 	;;
 	"")
