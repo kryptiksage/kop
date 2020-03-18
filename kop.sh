@@ -31,7 +31,7 @@ case $1 in
 	done
 	;;
 	-R)
-	# TODO : code for removing packages
+	sudo pacman -R $2
 	;;
 	"")
 	# TODO : code for updating all packages
