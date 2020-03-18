@@ -30,6 +30,9 @@ case $1 in
 		fi
 	done
 	;;
+	-R)
+	# TODO : code for removing packages
+	;;
 	"")
 	# TODO : code for updating all packages
 	;;
