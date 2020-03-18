@@ -36,7 +36,9 @@ case $1 in
 	sudo pacman -R $2
 	;;
 	"")
-	# TODO : code for updating all packages
+	sudo pacman -Syu
+	echo "Updating aur packages..."
+	# TODO : code for updating AUR packages
 	;;
 	*)
 	# TODO : code for listing packages
