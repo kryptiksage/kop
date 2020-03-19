@@ -41,5 +41,9 @@ case $1 in
 	# TODO : code for updating AUR packages
 	;;
 	*)
+	[ $# -ne 1 ] && echo "Invalid number of arguments" && exit 1
+	off_pkg q $1 | jq -r '"\(.pkgname) \(.pkgver) (\(.repo))\nAbout: \(.pkgdesc)\n"' > $HOME/.cache/kop/.pkg_search
+	aur_pkg $1 | jq -r '"\(.Name) \(.Version) (AUR)\nAbout: \(.Description)\n"' >> $HOME/.cache/kop/.pkg_search
+	cat $HOME/.cache/kop/.pkg_search
 	;;
 esac
