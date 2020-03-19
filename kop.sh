@@ -37,8 +37,27 @@ case $1 in
 	;;
 	"")
 	sudo pacman -Syu
-	echo "Updating aur packages..."
-	# TODO : code for updating AUR packages
+	echo "Updating AUR packages..."
+	aur_installed=$(pacman -Qmq)
+	for pkg in $aur_installed
+	do
+		aur_update=$(aur_pkg $pkg | jq -r 'select(.Name=="$pkg") | .Version')
+		if [ "$aur_update" != "$(pacman -Qm $pkg | awk '{print $2}')" ]
+		then
+			echo "Updating $pkg.."
+			#pkg_dir=$HOME/.cache/kop/$pkg
+			#if [ -d $pkg_dir ]
+			#then
+			#	cd $pkg_dir
+			#	rm -rf $pkg*
+			#	git pull
+			#else
+			#	git clone https://aur.archlinux.org/$pkg.git $pkg_dir
+			#	cd $pkg_dir
+			#fi
+			#makepkg -si
+		fi
+	done
 	;;
 	*)
 	[ $# -ne 1 ] && echo "Invalid number of arguments" && exit 1
