@@ -41,21 +41,22 @@ case $1 in
 	aur_installed=$(pacman -Qmq)
 	for pkg in $aur_installed
 	do
-		aur_update=$(aur_pkg $pkg | jq -r 'select(.Name=="$pkg") | .Version')
+		aur_update=$(aur_pkg $pkg | jq -r 'select(.Name=='\"$pkg\"') | .Version')
 		if [ "$aur_update" != "$(pacman -Qm $pkg | awk '{print $2}')" ]
 		then
+			echo $aur_update
 			echo "Updating $pkg.."
-			#pkg_dir=$HOME/.cache/kop/$pkg
-			#if [ -d $pkg_dir ]
-			#then
-			#	cd $pkg_dir
-			#	rm -rf $pkg*
-			#	git pull
-			#else
-			#	git clone https://aur.archlinux.org/$pkg.git $pkg_dir
-			#	cd $pkg_dir
-			#fi
-			#makepkg -si
+			pkg_dir=$HOME/.cache/kop/$pkg
+			if [ -d $pkg_dir ]
+			then
+				cd $pkg_dir
+				rm -rf $pkg*
+				git pull
+			else
+				git clone https://aur.archlinux.org/$pkg.git $pkg_dir
+				cd $pkg_dir
+			fi
+			makepkg -si
 		fi
 	done
 	;;
