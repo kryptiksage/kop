@@ -1,8 +1,16 @@
 #/bin/sh/
 
 # Creating directory and cloning repo 
-mkdir $HOME/.scripts 2>/dev/null
-git clone https://github.com/kryptiksage/kop.git $HOME/.scripts/kop
+mkdir -p $HOME/.scripts/kop 2>/dev/null
+
+# Cloning kop to .scripts
+if [ -d $HOME/.scripts/kop ]
+then
+	cd $HOME/.scripts/kop 
+	git pull
+else
+	git clone https://github.com/kryptiksage/kop.git $HOME/.scripts/kop
+fi
 
 # Execute permission to kop
 chmod +x $HOME/.scripts/kop/kop
