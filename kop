@@ -33,12 +33,12 @@ case "${1:0:1}" in
 					fi
 				fi
 			else
-			sudo pacman -S ${!i} 
+			sudo pacman $1 ${!i} 
 			fi
 		done
 		;;
 		*)
-		sudo pacman $1 $2
+		sudo pacman $*
 		;;
 	esac
 	;;
