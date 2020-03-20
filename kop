@@ -8,32 +8,31 @@ off_pkg () {
 curl -s -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq '.results []'
 }
 
-case $1 in
-	-S)
-	[ $# -lt 2 ] && echo "Insuffient number of packages" && exit 1
-	for(( i=2; i<=$#; i++ ))
-	do
-		package=$(off_pkg name $2 | jq -r  '.pkgname')
-		if [ -z "$package" ]
-		then
-			package=$(aur_pkg $2 |jq -r '.Name' | grep "^$2$")
-			if [ -z "$package" ]
+case "${1:0:1}" in
+	-)
+	case "${1:1:1}" in
+		S)			
+		for(( i=2; i<=$#; i++ ))
+		do
+			if ! sudo pacman $1 $2 
 			then
-				echo "Invalid package name : $package"
-			else
-				echo "Cloning aur repo..."
-				git clone --depth=1 https://aur.archlinux.org/$package.git $HOME/.cache/kop/$package 2>/dev/null
-				cd $HOME/.cache/kop/$package
-				makepkg -si
+				package=$(aur_pkg $2 |jq -r '.Name' | grep "^$2$")
+				if [ -z "$package" ]
+				then
+					echo "Invalid package name : $package"
+				else
+					echo "Cloning aur repo..."
+					git clone --depth=1 https://aur.archlinux.org/$package.git $HOME/.cache/kop/$package 2>/dev/null
+					cd $HOME/.cache/kop/$package
+					makepkg -si
+				fi
 			fi
-		else
-			sudo pacman -S $package
-		fi
-	done
-	;;
-	-R)
-	[ $# -lt 2 ] && echo "Insuffient number of packages" && exit 1
-	sudo pacman -R $2
+		done
+		;;
+		*)
+		sudo pacman $1 $2
+		;;
+	esac
 	;;
 	"")
 	sudo pacman -Syu
