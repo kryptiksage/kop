@@ -14,7 +14,7 @@ case "${1:0:1}" in
 		S)			
 		for(( i=2; i<=$#; i++ ))
 		do
-			if ! sudo pacman $1 $2 
+			if ! sudo pacman $1 $2 2>/dev/null 
 			then
 				package=$(aur_pkg $2 |jq -r '.Name' | grep "^$2$")
 				if [ -z "$package" ]
