@@ -21,10 +21,15 @@ case "${1:0:1}" in
 				then
 					echo "Invalid package name : $package"
 				else
-					echo "Cloning aur repo..."
-					git clone --depth=1 https://aur.archlinux.org/$package.git $HOME/.cache/kop/$package 2>/dev/null
-					cd $HOME/.cache/kop/$package
-					makepkg -si
+					if [ "$(pacman -Qq $package)" != "$package" ]
+					then
+						echo "Cloning aur repo..."
+						git clone --depth=1 https://aur.archlinux.org/$package.git $HOME/.cache/kop/$package 2>/dev/null
+						cd $HOME/.cache/kop/$package
+						makepkg -si
+					else
+						echo "Package $package already exists"
+					fi
 				fi
 			fi
 		done
