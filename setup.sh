@@ -19,4 +19,5 @@ chmod +x $HOME/.scripts/kop/kop
 [ $(pacman -Qq jq 2>/dev/null | wc -l) -eq 0 ] && sudo pacman -S jq
 
 # Export path of kop
+sed -i 's/export PATH*//g' $HOME/.zshrc
 echo export PATH="$HOME/.scripts/kop:$PATH" >> $HOME/.zshrc
