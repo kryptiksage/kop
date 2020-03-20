@@ -14,12 +14,13 @@ case "${1:0:1}" in
 		S)			
 		for(( i=2; i<=$#; i++ ))
 		do
-			if ! sudo pacman $1 $2 2>/dev/null 
+			package=$(off_pkg name ${!i} | jq -r '.pkgname')
+			if [ -z "$package" ]
 			then
-				package=$(aur_pkg $2 |jq -r '.Name' | grep "^$2$")
+				package=$(aur_pkg ${!i} | jq -r '.Name' | grep "^${!i}$")
 				if [ -z "$package" ]
 				then
-					echo "Invalid package name : $package"
+					echo "Invalid package name : ${!i}"; exit 1
 				else
 					if [ "$(pacman -Qq $package)" != "$package" ]
 					then
@@ -31,6 +32,8 @@ case "${1:0:1}" in
 						echo "Package $package already exists"
 					fi
 				fi
+			else
+			sudo pacman -S ${!i} 
 			fi
 		done
 		;;
