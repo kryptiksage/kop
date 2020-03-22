@@ -10,8 +10,8 @@ curl -s -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq '.re
 
 case "${1:0:1}" in
 	-)
-	case "${1:1:1}" in
-		S)			
+	case $1 in
+		-S)			
 		for(( i=2; i<=$#; i++ ))
 		do
 			package=$(off_pkg name ${!i} | jq -r '.pkgname')
