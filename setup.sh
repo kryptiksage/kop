@@ -1,7 +1,7 @@
 #/bin/sh/
 
 # Creating directory and cloning repo 
-mkdir -p $HOME/.scripts/kop 2>/dev/null
+mkdir  $HOME/.scripts/ 2>/dev/null
 
 # Cloning kop to .scripts
 if [ -d $HOME/.scripts/kop ]
@@ -19,5 +19,5 @@ chmod +x $HOME/.scripts/kop/kop
 [ $(pacman -Qq jq 2>/dev/null | wc -l) -eq 0 ] && sudo pacman -S jq
 
 # Export path of kop
-sed -i 's/export PATH*//g' $HOME/.zshrc
+sed -i '/export PATH*/d' $HOME/.zshrc
 echo export PATH="$HOME/.scripts/kop:$PATH" >> $HOME/.zshrc
