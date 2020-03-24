@@ -13,7 +13,8 @@ chmod +x $HOME/.scripts/kop
 
 # Export path of kop
 [ -f $HOME/.zshenv ] || touch $HOME/.zshenv && sed -i '/export PATH*/d' $HOME/.zshenv
+export PATH="$(echo $PATH | sed "s/\/home\/$USER\/.scripts\/\://g")"
 echo export PATH="$HOME/.scripts/:$PATH" >> $HOME/.zshenv
-source $HOME/.zshenv
+source ~/.zshenv
 
 echo "Done"
