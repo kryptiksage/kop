@@ -1,11 +1,11 @@
 #!/bin/sh
 
 aur_pkg () {
-	curl -s -X GET "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$1" | jq '.results []'
+	curl -s --compressed -X GET "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$1" | jq '.results []'
 }
 
 off_pkg () {
-curl -s -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq '.results []'
+curl -s --compressed -X GET "https://www.archlinux.org/packages/search/json/?$1=$2" | jq '.results []'
 }
 
 case "${1:0:1}" in
