@@ -15,3 +15,5 @@ chmod +x $HOME/.scripts/kop
 [ -f $HOME/.zshenv ] || touch $HOME/.zshenv && sed -i '/export PATH*/d' $HOME/.zshenv
 echo export PATH="$HOME/.scripts/:$PATH" >> $HOME/.zshenv
 source $HOME/.zshenv
+
+echo "Done"
