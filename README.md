@@ -1,7 +1,7 @@
 # dotfiles
 Run the following commands to install
 ```bash
-curl -s https://git.io/JvyrA | bash
+curl -s -L https://git.io/JvyrA | bash
 ```
 Watch everything unravel.
 
