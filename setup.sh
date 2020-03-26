@@ -9,7 +9,7 @@ curl -s https://raw.githubusercontent.com/kryptiksage/kop/master/kop > $HOME/.sc
 chmod +x $HOME/.scripts/kop
 
 # Installing jq
-[ $(pacman -Qq jq 2>/dev/null | wc -l) -eq 0 ] && sudo pacman -S jq
+[ -z $(pacman -Qq jq 2>/dev/null) ] && sudo pacman -S jq
 
 # Export path of kop
 [ -f $HOME/.zshenv ] || touch $HOME/.zshenv && sed -i '/export PATH*/d' $HOME/.zshenv
