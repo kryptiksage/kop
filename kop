@@ -1,7 +1,7 @@
 #!/bin/sh
 
 aur_pkg () {
-	curl -s --compressed -X GET "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$1" | jq '.results []'
+	curl -s --compressed -X GET "https://aur.archlinux.org/rpc/?v=5&type=$1&$2" | jq '.results []'
 }
 
 case "${1:0:1}" in
@@ -13,7 +13,7 @@ case "${1:0:1}" in
 			package=$(pacman -Ssq ${!i} | grep "^${!i}$")
 			if [ -z "$package" ]
 			then
-				package=$(aur_pkg ${!i} | jq -r '.Name' | grep "^${!i}$")
+				package=$(aur_pkg info arg[]=${!i} | jq -r '.Name')
 				if [ -z "$package" ]
 				then
 					echo "Invalid package name : ${!i}"; exit 1
@@ -41,13 +41,16 @@ case "${1:0:1}" in
 	"")
 	sudo pacman -Syu
 	echo "Updating AUR packages..."
-	aur_installed=$(pacman -Qmq)
-	for pkg in $aur_installed
+	aur_arguments=$(pacman -Qmq | sed -z 's/^/\&arg[]=/; s/\n/\&arg[]=/g')	
+	aur_update=$(curl -s -X GET "https://aur.archlinux.org/rpc/?v=5&type=info$aur_arguments" | jq -r '.results | sort_by(.Name) | .[] | "\(.Name) \(.Version)"')
+	aur_installed=$(pacman -Qm)
+	lines=$(echo "$aur_installed" | wc -l)
+	for (( i=1; i<=$lines; i++ ))	
 	do
-		aur_update=$(aur_pkg $pkg | jq -r 'select(.Name=='\"$pkg\"') | .Version')
-		if [ "$aur_update" != "$(pacman -Qm $pkg | awk '{print $2}')" ]
+		aur_line=$(echo "$aur_installed" | sed -n $ip)
+		if [ $(echo "$aur_line") = $(echo "aur_update" | sed -n $ip) ]
 		then
-			echo $aur_update
+			pkg=$(echo $aur_line | awk '{print $1}')
 			echo "Updating $pkg.."
 			pkg_dir=$HOME/.cache/kop/$pkg
 			if [ -d $pkg_dir ]
@@ -67,7 +70,7 @@ case "${1:0:1}" in
 	[ $# -ne 1 ] && echo "Invalid number of arguments" && exit 1
 	[ -d $HOME/.cache/kop ] || mkdir -p $HOME/.cache/kop
 	pacman -Ss $1 > $HOME/.cache/kop/.pkg_search
-	aur_pkg $1 | jq -r '"AUR\/\(.Name) \(.Version)\n\t\(.Description)"' >> $HOME/.cache/kop/.pkg_search
+	aur_pkg search arg=$1 | jq -r '"AUR\/\(.Name) \(.Version)\n\t\(.Description)"' >> $HOME/.cache/kop/.pkg_search
 	cat $HOME/.cache/kop/.pkg_search
 	;;
 esac
