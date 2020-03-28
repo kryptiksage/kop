@@ -74,3 +74,4 @@ case "${1:0:1}" in
 	cat $HOME/.cache/kop/.pkg_search
 	;;
 esac
+echo "Done"
