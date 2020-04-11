@@ -69,8 +69,8 @@ case "${1:0:1}" in
 	*)
 	[ $# -ne 1 ] && echo "Invalid number of arguments" && exit 1
 	[ -d $HOME/.cache/kop ] || mkdir -p $HOME/.cache/kop
-	aur_pkg search arg=$1 | jq -r '"AUR\/\(.Name) \(.Version)\n\t\(.Description)"' >> $HOME/.cache/kop/.pkg_search
-	pacman -Ss $1 > $HOME/.cache/kop/.pkg_search
+	aur_pkg search arg=$1 | jq -r '"AUR\/\(.Name) \(.Version)\n\t\(.Description)"' > $HOME/.cache/kop/.pkg_search
+	pacman -Ss $1 >> $HOME/.cache/kop/.pkg_search
 	cat $HOME/.cache/kop/.pkg_search
 	;;
 esac
