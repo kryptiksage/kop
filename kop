@@ -47,10 +47,11 @@ case "${1:0:1}" in
 	lines=$(echo "$aur_installed" | wc -l)
 	for (( i=1; i<=$lines; i++ ))	
 	do
-		aur_line=$(echo "$aur_installed" | sed -n "$i"p)
-		if [ "$(echo "$aur_line")" != "$(echo "$aur_update" | sed -n "$i"p)" ]
+		aur_old=$(echo "$aur_installed" | sed -n "$i"p)
+		aur_new=$(echo "$aur_update" | sed -n "$i"p)
+		if [ "$aur_old" != "$aur_new" ]
 		then
-			pkg=$(echo $aur_line | awk '{print $1}')
+			pkg=$(echo $aur_old | awk '{print $1}')
 			echo "Updating $pkg.."
 			pkg_dir=$HOME/.cache/kop/$pkg
 			if [ -d $pkg_dir ]
